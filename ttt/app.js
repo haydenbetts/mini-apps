@@ -14,6 +14,34 @@ class TTT {
     this.writeMessageToDOM = this.writeMessageToDOM.bind(this);
   }
 
+  arrayHasAllSameElt(array) {
+    return !!array.reduce((a, b) => (a === b) ? a : false)
+  }
+
+  columnsFromBoard(board) {
+    return board.map((row, i) => {
+      return row.map((cell, j) => {
+        return board[j][i];
+      })
+    })
+  }
+
+  diagonalsFromBoard() {
+
+  }
+
+  isWinner(board) {
+
+    let columnsFromBoard = this.columnsFromBoard(this.board);
+
+    for (let i = 0; i < board.length; i++) {
+      if (this.arrayHasAllSameElt(board[i])) return true;
+      if (this.arrayHasAllSameElt(columnsFromBoard[i])) return true;
+    }
+
+    return false;
+  }
+
   writeMessageToDOM(message) {
     let messageNode = document.getElementById('gameStatus');
     messageNode.innerText = message;
@@ -36,14 +64,16 @@ class TTT {
   handleClick(node) {
     let rowNum = node.target.id.split('-')[1];
     let cellNum = node.target.id.split('-')[3];
-    console.log(rowNum, cellNum);
-    // validate to make sure move is valid
-    //move is valid if
     if (this.positionEmpty(this.board, rowNum, cellNum)) {
       this.updateBoard(this.currentPlayer, rowNum, cellNum);
     } else {
       this.writeMessageToDOM('You can only play empty spaces!')
     }
+
+    if (this.isWinner(this.board)) {
+      this.writeMessageToDOM('Winner!')
+    };
+    // check if it is a cat's game
     this.switchCurrentPlayer();
   }
 
