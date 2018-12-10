@@ -1,9 +1,9 @@
 class TTT {
   constructor() {
     this.board = [
-      ["X", " ", " "],
-      [" ", "X", " "],
-      [" ", " ", "X"]
+      [" ", " ", " "],
+      [" ", " ", " "],
+      [" ", " ", " "]
     ]
 
     this.currentPlayer = "X";
@@ -15,7 +15,11 @@ class TTT {
   }
 
   arrayHasAllSameElt(array) {
-    return !!array.reduce((a, b) => (a === b) ? a : false)
+    return this.arrayStartsWithPlayedSpace(array) && !!array.reduce((a, b) => (a === b) ? a : false)
+  }
+
+  arrayStartsWithPlayedSpace(array) {
+    return array[0] !== " ";
   }
 
   columnsFromBoard(board) {
@@ -26,17 +30,14 @@ class TTT {
     })
   }
 
-  diagonalsFromBoard() {
-
-  }
-
   isWinner(board) {
 
-    let columnsFromBoard = this.columnsFromBoard(this.board);
-
+    let columns = this.columnsFromBoard(this.board);
+    let diagonals = [[board[0][0], board[1][1], board[2][2]], [board[0][0], board[1][1], board[2][2]]]
     for (let i = 0; i < board.length; i++) {
       if (this.arrayHasAllSameElt(board[i])) return true;
-      if (this.arrayHasAllSameElt(columnsFromBoard[i])) return true;
+      if (this.arrayHasAllSameElt(columns[i])) return true;
+      if (diagonals[i] && this.arrayHasAllSameElt(diagonals[i])) return true;
     }
 
     return false;
